@@ -304,7 +304,7 @@
                                         //Create a Functionality statement
                                         //***********************************************************
                                         //Functionality:
-                                        // This is a provisioning service which creates a cold storage 
+                                        // This is a provisioning service which creates a cold storage
                                         // thing (instance of PTC.CS.ColdStorage.TT) with the name
                                         // ColdStorage-[csName input parameter]
                                         //***********************************************************
@@ -312,21 +312,21 @@
                                         //Release: 1.0
                                         //Sprint:na
                                         //***********************************************************
-                                        
+
                                         var thingName="ColdStorage-" + csName; //name of the thing to be created
                                         var tags = [{vocabulary:"Applications",vocabularyTerm:"DataEntity"}]; //application tag to be assigned
                                         logger.debug("Attempting to create " + thingName);
-                                        
+
                                         if (!csName) { // if no input parameter, throw error
                                             logger.warn("Attempt to create cold storage thing with no name.");
                                             throw "Service requires thing name as input parameter.";
                                         }
-                                        
+
                                         if(Things[thingName]) { // if thing already exists, throw error.
                                             logger.warn("Attempt to create " + thingName + " which already exists.");
                                             throw thingName + " already exists.";
                                         }
-                                        
+
                                         try{ // Create Thing
                                             var params = {
                                             	name: thingName,
@@ -334,7 +334,7 @@
                                             	thingTemplateName: "PTC.CS.ColdStorage.TT",
                                             	tags: tags
                                             };
-                                            Resources["EntityServices"].CreateThing(params);	
+                                            Resources["EntityServices"].CreateThing(params);
                                             Things[thingName].EnableThing();
                                             Things[thingName].RestartThing();
                                             logger.debug(thingName + " Created");
@@ -391,7 +391,7 @@
                                         // Adds PTC.CS.[userName].Group to org unit.
                                         // Grants org unit visibility to ColdStorage-[userName] thing
                                         //***********************************************************
-                                        //Author: John 
+                                        //Author: John
                                         //Version: Initial Version
                                         //Release: 1.0
                                         //***********************************************************
@@ -400,7 +400,7 @@
                                         var groupName = "PTC.CS." + userName + ".Group";
                                         var orgUnitName=userName+"ColdStorageRoom";
                                         var fullOrgUnitName="PTC.CS.ColdStorage.Org:"+orgUnitName;
-                                        
+
                                         if(!userName) {
                                             logger.warn("userName input parameter required");
                                             throw "userName input parameter required";
@@ -412,8 +412,8 @@
                                         if (Organizations["PTC.CS.ColdStorage.Org"].IsInOrganization({name: orgUnitName})) {
                                             logger.warn("Organizational unit " + orgUnitName + " already exists.");
                                             throw "Organizational unit " + orgUnitName + " already exists.";
-                                        }               
-                                        
+                                        }
+
                                         try {
                                         	Organizations["PTC.CS.ColdStorage.Org"].AddOrganizationalUnit({
                                             	parentName: "PTC.CS.ColdStorage.Org",
@@ -480,12 +480,12 @@
                                         // Returns a message string suitable for a status message in a mashup.
                                         // Should not return an error.
                                         //***********************************************************
-                                        //Author: John 
+                                        //Author: John
                                         //Version: Initial Version
                                         //Release: 1.0
                                         //***********************************************************
                                         var returnMessage="";
-                                        
+
                                         if (siteName && password) {
                                         	try{
                                         		me.CreateColdStorageThing({
@@ -548,26 +548,27 @@
                                         // Create a group with the name PTC.CS.[userName].Group.
                                         // Use DataEntities tag and assign user to group.
                                         //***********************************************************
-                                        //Author: John 
+                                        //Author: John
                                         //Version: Initial Version
                                         //Release: 2.0
+
                                         //***********************************************************
                                         var tags = [{vocabulary:"Applications",vocabularyTerm:'DataEntities'}]; //application tag to be assigned
                                         var userName=userName;
                                         var groupName = "PTC.CS."+userName+".Group";
                                         var thingName = "ColdStorage-" + userName;
                                         logger.debug("Attepting to create " + userName + " and " + groupName);
-                                        
+
                                         if (!userName) { // Service requires username input.
                                             logger.warn ("attempt to create user with no username");
                                             throw "Attempt to create a user with no username";
                                         }
-                                        
+
                                         if (Users[userName]) { // Cannot create user that already exists.
                                             logger.warn ("Cannot create " + userName + " because it already exists");
                                             throw "Cannot create " + userName + " because it already exists";
                                         }
-                                        
+
                                         try{
                                             var params = {
                                                 password: password,
@@ -592,7 +593,7 @@
                                                 throw "Potential ghost entity " + userName + " user";
                                             }
                                         }
-                                        
+
                                         // Create Group
                                         try {
                                             var params = {
@@ -658,7 +659,7 @@
                                         var userGroups =  Users[userName].GetGroups();
                                         var tableLength = userGroups.getRowCount();
                                         logger.debug("Checking admin status for " + userName);
-                                        
+
                                         var isMember = false;
                                         for (var x = 0; x < tableLength; x++) {
                                         	var row = userGroups.rows[x];
@@ -708,7 +709,7 @@
                                         // to see how missing extension dependencies can be detected
                                         // and found.
                                         //***********************************************************
-                                        //Author: John 
+                                        //Author: John
                                         //Version: Initial Version
                                         //Release: 1.0
                                         //***********************************************************
@@ -763,18 +764,18 @@
                                         // Visibility to the Media collection to the Everyone organization
                                         // Design Time Create on the Users collection to PTC.CS.ColdStorageAdministrators.Group
                                         //***********************************************************
-                                        //Author: John 
+                                        //Author: John
                                         //Version: Initial Version
                                         //Release: 1.0
                                         //***********************************************************
-                                        
+
                                         //System User service invoke on all collections
                                         //get list of entity types (collections)
                                         var entityTypeList =  Subsystems["PlatformSubsystem"].GetEntityCount({
                                         	modelTags: undefined,
                                         	type: undefined
                                         });
-                                        for each (var row in entityTypeList.rows) {	//loop and add permission for each collection					
+                                        for each (var row in entityTypeList.rows) {	//loop and add permission for each collection
                                         	params = {
                                                     principal: "System" /* STRING */,
                                                     allow: true /* BOOLEAN */,
@@ -783,7 +784,7 @@
                                                     principalType: "User" /* STRING */,
                                                     collectionName: row.name /* STRING */
                                           	 };
-                                        	Resources["CollectionFunctions"].AddCollectionRunTimePermission(params);    
+                                        	Resources["CollectionFunctions"].AddCollectionRunTimePermission(params);
                                         	params.type = "PropertyRead";
                                         	Resources["CollectionFunctions"].AddCollectionRunTimePermission(params);
                                         	params.type = "PropertyWrite";
@@ -805,9 +806,9 @@
                                             params.type = "Update";
                                             Resources["CollectionFunctions"].AddCollectionDesignTimePermission(params);
                                             params.type = "Delete";
-                                            Resources["CollectionFunctions"].AddCollectionDesignTimePermission(params); 
+                                            Resources["CollectionFunctions"].AddCollectionDesignTimePermission(params);
                                         }logger.debug("Adding allpermissions to all collections for SYSTEM user");
-                                          
+
                                         //+Visibility to PTC.CS.ColdStorage.Org on Resources collection
                                         var params = {
                                         	principal: "PTC.CS.ColdStorage.Org" /* STRING */,
@@ -816,7 +817,7 @@
                                         };
                                         Resources["CollectionFunctions"].AddCollectionVisibilityPermission(params);
                                         logger.debug("Adding visibility permission for PTC.CS.ColdStorage.Org on Resources collection.");
-                                        
+
                                         //+Visibility to PTC.CS.ColdStorage.Org on Subsystems collection
                                         var params = {
                                         	principal: "PTC.CS.ColdStorage.Org" /* STRING */,
@@ -825,7 +826,7 @@
                                         };
                                         Resources["CollectionFunctions"].AddCollectionVisibilityPermission(params);
                                         logger.debug("Adding visibility permission for PTC.CS.ColdStorage.Org on Subsystems collection.");
-                                        
+
                                         //Visibility to the Media collection to the Everyone organization
                                         var params = {
                                         	principal: "Everyone" /* STRING */,
@@ -834,7 +835,7 @@
                                         };
                                         Resources["CollectionFunctions"].AddCollectionVisibilityPermission(params);
                                         logger.debug("Adding visibility permission for Everyone on Media collection.");
-                                        
+
                                         //+Design Time Create on the Users collection to PTC.CS.ColdStorageAdministrators.Group
                                         Resources["CollectionFunctions"].AddCollectionDesignTimePermission({
                                         	principal: "PTC.CS.ColdStorageAdministrators.Group" /* STRING */,
