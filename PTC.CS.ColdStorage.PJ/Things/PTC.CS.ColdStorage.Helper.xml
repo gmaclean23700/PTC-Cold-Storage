@@ -550,7 +550,7 @@
                                         //***********************************************************
                                         //Author: John 
                                         //Version: Initial Version
-                                        //Release: 1.0
+                                        //Release: 1.1
                                         //***********************************************************
                                         var tags = [{vocabulary:"Applications",vocabularyTerm:'DataEntities'}]; //application tag to be assigned
                                         var userName=userName;
